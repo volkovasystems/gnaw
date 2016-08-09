@@ -1,0 +1,29 @@
+{
+  "name": "gnaw",
+  "version": "0.0.0",
+  "description": "Consume command result.",
+  "main": "gnaw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/volkovasystems/gnaw.git"
+  },
+  "keywords": [
+    "simple",
+    "command",
+    "result",
+    "gnaw"
+  ],
+  "author": "Richeve S. Bebedor <richeve.bebedor@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/volkovasystems/gnaw/issues"
+  },
+  "homepage": "https://github.com/volkovasystems/gnaw#readme",
+  "dependencies": {
+    "called": "0.0.5",
+    "harden": "^0.3.2"
+  }
+}
