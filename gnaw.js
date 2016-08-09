@@ -53,7 +53,8 @@
 		{
 			"called": "called",
 			"child": "child_process",
-			"harden": "harden"
+			"harden": "harden",
+			"letgo": "letgo"
 		}
 	@end-include
 */
@@ -61,6 +62,7 @@
 var called = require( "called" );
 var child = require( "child_process" );
 var harden = require( "harden" );
+var letgo = require( "letgo" );
 
 var gnaw = function gnaw( command, synchronous ){
 	/*;
@@ -96,22 +98,12 @@ var gnaw = function gnaw( command, synchronous ){
 		}
 
 	}else{
-		var self = this;
-		if( !this ||
-			this === global )
-		{
-			self = global;
-		}
-
-		var cache = { "callback": called( ) };
-		var catcher = function catcher( callback ){
-			cache.callback = called.bind( self )( callback );
-
-			return cache;
-		};
+		var catcher = letgo.bind( this )( );
 
 		child.exec( command,
 			function onExecute( error, output ){
+				var cache = catcher.cache;
+
 				if( error ){
 					error = gnaw.resolveError( error );
 
