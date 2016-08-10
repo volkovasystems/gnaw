@@ -1,6 +1,6 @@
 {
   "name": "gnaw",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Consume command result.",
   "main": "gnaw.js",
   "scripts": {
@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/volkovasystems/gnaw#readme",
   "dependencies": {
-    "called": "0.0.5",
     "harden": "^0.3.2",
     "letgo": "0.0.0"
   }

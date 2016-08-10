@@ -51,7 +51,6 @@
 
 	@include:
 		{
-			"called": "called",
 			"child": "child_process",
 			"harden": "harden",
 			"letgo": "letgo"
@@ -59,7 +58,6 @@
 	@end-include
 */
 
-var called = require( "called" );
 var child = require( "child_process" );
 var harden = require( "harden" );
 var letgo = require( "letgo" );
