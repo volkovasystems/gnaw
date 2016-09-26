@@ -1,5 +1,3 @@
-"use strict";
-
 /*;
 	@module-license:
 		The MIT License (MIT)
@@ -53,7 +51,8 @@
 		{
 			"child": "child_process",
 			"harden": "harden",
-			"letgo": "letgo"
+			"letgo": "letgo",
+			"zelf": "zelf"
 		}
 	@end-include
 */
@@ -61,6 +60,7 @@
 var child = require( "child_process" );
 var harden = require( "harden" );
 var letgo = require( "letgo" );
+var zelf = require( "zelf" );
 
 var gnaw = function gnaw( command, synchronous ){
 	/*;
@@ -72,9 +72,7 @@ var gnaw = function gnaw( command, synchronous ){
 		@end-meta-configuration
 	*/
 
-	if( typeof command != "string" ||
-		!command )
-	{
+	if( typeof command != "string" || !command ){
 		throw new Error( "invalid command" );
 	}
 
@@ -96,7 +94,9 @@ var gnaw = function gnaw( command, synchronous ){
 		}
 
 	}else{
-		var catcher = letgo.bind( this )( );
+		var self = zelf( this );
+
+		var catcher = letgo.bind( self )( );
 
 		child.exec( command,
 			function onExecute( error, output ){
@@ -133,11 +133,11 @@ var gnaw = function gnaw( command, synchronous ){
 };
 
 harden( "resolveError", function resolveError( error ){
-	var _error = error.toString( "utf8" ).trim( ).split( "\n" );
+	var issue = error.toString( "utf8" ).trim( ).split( "\n" );
 
-	_error = _error.reverse( );
-	_error.pop( );
-	error = _error.reverse( ).join( "\n" );
+	issue = issue.reverse( );
+	issue.pop( );
+	error = issue.reverse( ).join( "\n" );
 
 	if( error ){
 		return new Error( error );
