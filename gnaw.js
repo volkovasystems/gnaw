@@ -32,6 +32,9 @@
 			"file": "gnaw.js",
 			"module": "gnaw",
 			"author": "Richeve S. Bebedor",
+			"contributors": [
+				"John Lenon Maghanoy <johnlenonmaghanoy@gmail.com>"
+			],
 			"eMail": "richeve.bebedor@gmail.com",
 			"repository": "https://github.com/volkovasystems/gnaw.git",
 			"test": "gnaw-test.js",
@@ -50,19 +53,23 @@
 	@include:
 		{
 			"child": "child_process",
+			"falzy": "falzy",
 			"harden": "harden",
 			"letgo": "letgo",
+			"protype": "protype",
 			"zelf": "zelf"
 		}
 	@end-include
 */
 
-var child = require( "child_process" );
-var harden = require( "harden" );
-var letgo = require( "letgo" );
-var zelf = require( "zelf" );
+const child = require( "child_process" );
+const falzy = require( "falzy" );
+const harden = require( "harden" );
+const letgo = require( "letgo" );
+const protype = require( "protype" );
+const zelf = require( "zelf" );
 
-var gnaw = function gnaw( command, synchronous ){
+const gnaw = function gnaw( command, synchronous ){
 	/*;
 		@meta-configuration:
 			{
@@ -72,13 +79,13 @@ var gnaw = function gnaw( command, synchronous ){
 		@end-meta-configuration
 	*/
 
-	if( typeof command != "string" || !command ){
+	if( !protype( command, STRING ) || falzy( command ) ){
 		throw new Error( "invalid command" );
 	}
 
 	if( synchronous ){
 		try{
-			var output = child.execSync( command ).toString( "utf8" );
+			let output = child.execSync( command ).toString( "utf8" );
 
 			return output.trim( ).replace( /^\s*|\s*$/gm, "" );
 
@@ -94,13 +101,13 @@ var gnaw = function gnaw( command, synchronous ){
 		}
 
 	}else{
-		var self = zelf( this );
+		let self = zelf( this );
 
-		var catcher = letgo.bind( self )( );
+		let catcher = letgo.bind( self )( );
 
 		child.exec( command,
 			function onExecute( error, output ){
-				var cache = catcher.cache;
+				let cache = catcher.cache;
 
 				if( error ){
 					error = gnaw.resolveError( error );
@@ -133,7 +140,7 @@ var gnaw = function gnaw( command, synchronous ){
 };
 
 harden( "resolveError", function resolveError( error ){
-	var issue = error.toString( "utf8" ).trim( ).split( "\n" );
+	let issue = error.toString( "utf8" ).trim( ).split( "\n" );
 
 	issue = issue.reverse( );
 	issue.pop( );
