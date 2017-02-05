@@ -52,94 +52,31 @@
 
 	@include:
 		{
+			"clazof": "clazof",
 			"child": "child_process",
+			"depher": "depher",
 			"falzy": "falzy",
 			"harden": "harden",
 			"letgo": "letgo",
+			"optall": "optall",
 			"protype": "protype",
+			"raze": "raze",
 			"zelf": "zelf"
 		}
 	@end-include
 */
 
+const clazof = require( "clazof" );
 const child = require( "child_process" );
+const depher = require( "depher" );
 const falzy = require( "falzy" );
-const harden = require( "harden" );
 const letgo = require( "letgo" );
+const optall = require( "optall" );
 const protype = require( "protype" );
+const raze = require( "raze" );
 const zelf = require( "zelf" );
 
-const gnaw = function gnaw( command, synchronous ){
-	/*;
-		@meta-configuration:
-			{
-				"command:required": "string",
-				"synchronous": "boolean"
-			}
-		@end-meta-configuration
-	*/
-
-	if( !protype( command, STRING ) || falzy( command ) ){
-		throw new Error( "invalid command" );
-	}
-
-	if( synchronous ){
-		try{
-			let output = child.execSync( command ).toString( "utf8" );
-
-			return output.trim( ).replace( /^\s*|\s*$/gm, "" );
-
-		}catch( error ){
-			error = gnaw.resolveError( error );
-
-			if( error ){
-				throw error;
-
-			}else{
-				return error;
-			}
-		}
-
-	}else{
-		let self = zelf( this );
-
-		let catcher = letgo.bind( self )( );
-
-		child.exec( command,
-			function onExecute( error, output ){
-				let cache = catcher.cache;
-
-				if( error ){
-					error = gnaw.resolveError( error );
-
-					if( error ){
-						cache.error = error;
-						cache.result = null;
-
-						cache.callback( error, null );
-
-					}else{
-						cache.error = null;
-						cache.result = null;
-
-						cache.callback( null, null );
-					}
-
-				}else{
-					output = output.trim( ).replace( /^\s*|\s*$/gm, "" );
-
-					cache.error = null;
-					cache.result = output;
-
-					cache.callback( null, output );
-				}
-			} );
-
-		return catcher;
-	}
-};
-
-harden( "resolveError", function resolveError( error ){
+const resolveError = function resolveError( error ){
 	let issue = error.toString( "utf8" ).trim( ).split( "\n" );
 
 	issue = issue.reverse( );
@@ -152,6 +89,73 @@ harden( "resolveError", function resolveError( error ){
 	}else{
 		return "";
 	}
-}, gnaw );
+};
+
+const resolveOutput = function resolveOutput( output ){
+	return output.trim( ).replace( /^\s*|\s*$/gm, "" );
+};
+
+const gnaw = function gnaw( command, synchronous ){
+	/*;
+		@meta-configuration:
+			{
+				"command:required": "string",
+				"synchronous": "boolean"
+			}
+		@end-meta-configuration
+	*/
+
+	let parameter = raze( arguments );
+
+	command = optall( parameter, STRING ).join( " && " );
+
+	synchronous = depher( parameter, BOOLEAN, false );
+
+	if( falzy( command ) || !protype( command, STRING ) ){
+		throw new Error( "invalid command" );
+	}
+
+	if( synchronous ){
+		try{
+			return resolveOutput( child.execSync( command ).toString( "utf8" ) );
+
+		}catch( error ){
+			error = resolveError( error );
+
+			if( clazof( error, Error ) ){
+				throw error;
+
+			}else{
+				return "";
+			}
+		}
+
+	}else{
+		let self = zelf( this );
+
+		let catcher = letgo.bind( self )( function later( cache ){
+			child.exec( command,
+				function done( error, output ){
+					if( error ){
+						error = resolveError( error );
+
+						if( clazof( error, Error ) ){
+							cache.callback( error, "" );
+
+						}else{
+							cache.callback( null, "" );
+						}
+
+					}else{
+						cache.callback( null, resolveOutput( output ) );
+					}
+
+					catcher.release( );
+				} );
+		} );
+
+		return catcher;
+	}
+};
 
 module.exports = gnaw;
