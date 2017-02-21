@@ -61,6 +61,7 @@
 			"optall": "optall",
 			"protype": "protype",
 			"raze": "raze",
+			"truly": "truly",
 			"zelf": "zelf"
 		}
 	@end-include
@@ -70,20 +71,38 @@ const clazof = require( "clazof" );
 const child = require( "child_process" );
 const depher = require( "depher" );
 const falzy = require( "falzy" );
+const harden = require( "harden" );
 const letgo = require( "letgo" );
 const optall = require( "optall" );
 const protype = require( "protype" );
 const raze = require( "raze" );
+const truly = require( "truly" );
 const zelf = require( "zelf" );
 
+harden( "AND", Symbol.for( "and" ) );
+harden( "OR", Symbol.for( "or" ) );
+harden( "PIPE", Symbol.for( "pipe" ) );
+
+const AND_SEPARATOR = " && ";
+const OR_SEPARATOR = " || ";
+const PIPE_SEPARATOR = " | ";
+
 const resolveError = function resolveError( error ){
+	/*;
+		@meta-configuration:
+			{
+				"error:required": Error
+			}
+		@end-meta-configuration
+	*/
+
 	let issue = error.toString( "utf8" ).trim( ).split( "\n" );
 
 	issue = issue.reverse( );
 	issue.pop( );
 	error = issue.reverse( ).join( "\n" );
 
-	if( error ){
+	if( truly( error ) ){
 		return new Error( error );
 
 	}else{
@@ -92,24 +111,47 @@ const resolveError = function resolveError( error ){
 };
 
 const resolveOutput = function resolveOutput( output ){
+	/*;
+		@meta-configuration:
+			{
+				"output:required": "string"
+			}
+		@end-meta-configuration
+	*/
+
+	if( !protype( output, STRING ) ){
+		throw new Error( "invalid output string" );
+	}
+
 	return output.trim( ).replace( /^\s*|\s*$/gm, "" );
 };
 
-const gnaw = function gnaw( command, synchronous ){
+const gnaw = function gnaw( command, synchronous, separator, option ){
 	/*;
 		@meta-configuration:
 			{
 				"command:required": "string",
-				"synchronous": "boolean"
+				"synchronous": "boolean",
+				"separator": "symbol",
+				"option": "object"
 			}
 		@end-meta-configuration
 	*/
 
 	let parameter = raze( arguments );
 
-	command = optall( parameter, STRING ).join( " && " );
+	separator = depher( parameter, SYMBOL, AND );
+
+	command = optall( parameter, STRING )
+		.join( ( separator === OR )?
+					OR_SEPARATOR :
+				( separator === PIPE )?
+					PIPE_SEPARATOR :
+					AND_SEPARATOR );
 
 	synchronous = depher( parameter, BOOLEAN, false );
+
+	option = depher( parameter, OBJECT, { } );
 
 	if( falzy( command ) || !protype( command, STRING ) ){
 		throw new Error( "invalid command" );
@@ -117,7 +159,7 @@ const gnaw = function gnaw( command, synchronous ){
 
 	if( synchronous ){
 		try{
-			return resolveOutput( child.execSync( command ).toString( "utf8" ) );
+			return resolveOutput( child.execSync( command, option ).toString( "utf8" ) );
 
 		}catch( error ){
 			error = resolveError( error );
@@ -131,12 +173,10 @@ const gnaw = function gnaw( command, synchronous ){
 		}
 
 	}else{
-		let self = zelf( this );
-
-		let catcher = letgo.bind( self )( function later( cache ){
-			child.exec( command,
+		let catcher = letgo.bind( zelf( this ) )( function later( cache ){
+			child.exec( command, option,
 				function done( error, output ){
-					if( error ){
+					if( clazof( error, Error ) ){
 						error = resolveError( error );
 
 						if( clazof( error, Error ) ){
