@@ -1,6 +1,6 @@
 {
   "name": "gnaw",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Consume command result.",
   "main": "gnaw.js",
   "scripts": {
@@ -26,12 +26,12 @@
   },
   "homepage": "https://github.com/volkovasystems/gnaw#readme",
   "dependencies": {
-    "clazof": "^0.25.0",
-    "depher": "^0.30.0",
+    "clazof": "^0.27.0",
+    "depher": "^0.32.0",
     "falzy": "^0.19.0",
     "harden": "^0.21.0",
-    "letgo": "^0.28.0",
-    "optall": "^0.20.0",
+    "letgo": "^0.29.0",
+    "optall": "^0.22.0",
     "protype": "^0.21.0",
     "raze": "^0.29.0",
     "truly": "^0.18.0",
