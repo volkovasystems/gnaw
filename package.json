@@ -1,6 +1,6 @@
 {
   "name": "gnaw",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "Consume command result.",
   "main": "gnaw.js",
   "scripts": {
@@ -30,7 +30,7 @@
     "depher": "^0.32.0",
     "falzy": "^0.19.0",
     "harden": "^0.21.0",
-    "letgo": "^0.34.0",
+    "letgo": "^0.36.0",
     "optall": "^0.22.0",
     "protype": "^0.21.0",
     "raze": "^0.29.0",
