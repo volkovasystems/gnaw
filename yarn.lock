@@ -529,9 +529,9 @@ lazy-cache@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-1.0.4.tgz#a1d78fc3a50474cb80845d3b3b6e1da49a446e8e"
 
-letgo@^0.36.0:
-  version "0.36.0"
-  resolved "https://registry.yarnpkg.com/letgo/-/letgo-0.36.0.tgz#11033490adb0ead640a1899bcf2dc06c500809d7"
+letgo@^0.38.0:
+  version "0.38.0"
+  resolved "https://registry.yarnpkg.com/letgo/-/letgo-0.38.0.tgz#ccd8f0aa61cc309cd027f71d69215a7f80e9ee4d"
   dependencies:
     arid "^0.25.0"
     asea "^0.13.0"

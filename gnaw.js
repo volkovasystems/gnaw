@@ -126,6 +126,27 @@ const resolveOutput = function resolveOutput( output ){
 	return output.trim( ).replace( /^\s*|\s*$/gm, "" );
 };
 
+const resolveSeparator = function resolveSeparator( separator ){
+	/*;
+		@meta-configuration:
+			{
+				"separator": "symbol"
+			}
+		@end-meta-configuration
+	*/
+
+	switch( separator ){
+		case OR:
+			return OR_SEPARATOR;
+
+		case PIPE:
+			return PIPE_SEPARATOR;
+
+		default:
+			return AND_SEPARATOR;
+	}
+};
+
 const gnaw = function gnaw( command, synchronous, separator, option ){
 	/*;
 		@meta-configuration:
@@ -140,14 +161,9 @@ const gnaw = function gnaw( command, synchronous, separator, option ){
 
 	let parameter = raze( arguments );
 
-	separator = depher( parameter, SYMBOL, AND );
+	separator = resolveSeparator( depher( parameter, SYMBOL, AND ) );
 
-	command = optall( parameter, STRING )
-		.join( ( separator === OR )?
-					OR_SEPARATOR :
-				( separator === PIPE )?
-					PIPE_SEPARATOR :
-					AND_SEPARATOR );
+	command = optall( parameter, STRING ).join( separator );
 
 	synchronous = depher( parameter, BOOLEAN, false );
 
@@ -159,6 +175,11 @@ const gnaw = function gnaw( command, synchronous, separator, option ){
 
 	if( synchronous ){
 		try{
+			/*;
+				@note:
+					Do not modify the toString here.
+				@end-note
+			*/
 			return resolveOutput( child.execSync( command, option ).toString( "utf8" ) );
 
 		}catch( error ){
@@ -173,21 +194,21 @@ const gnaw = function gnaw( command, synchronous, separator, option ){
 		}
 
 	}else{
-		let catcher = letgo.bind( zelf( this ) )( function later( cache ){
+		let catcher = letgo.bind( zelf( this ) )( function later( callback ){
 			child.exec( command, option,
 				function done( error, output ){
 					if( clazof( error, Error ) ){
 						error = resolveError( error );
 
 						if( clazof( error, Error ) ){
-							cache.callback( error, "" );
+							callback( error, "" );
 
 						}else{
-							cache.callback( null, "" );
+							callback( null, "" );
 						}
 
 					}else{
-						cache.callback( null, resolveOutput( output ) );
+						callback( null, resolveOutput( output ) );
 					}
 
 					catcher.release( );
