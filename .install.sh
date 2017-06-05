@@ -4,8 +4,8 @@ depher \
 falzy \
 harden \
 letgo \
-optall \
 protype \
+pyck \
 raze \
 truly \
 zelf \

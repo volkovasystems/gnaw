@@ -58,8 +58,8 @@
 			"falzy": "falzy",
 			"harden": "harden",
 			"letgo": "letgo",
-			"optall": "optall",
 			"protype": "protype",
+			"pyck": "pyck",
 			"raze": "raze",
 			"truly": "truly",
 			"zelf": "zelf"
@@ -73,8 +73,8 @@ const depher = require( "depher" );
 const falzy = require( "falzy" );
 const harden = require( "harden" );
 const letgo = require( "letgo" );
-const optall = require( "optall" );
 const protype = require( "protype" );
+const pyck = require( "pyck" );
 const raze = require( "raze" );
 const truly = require( "truly" );
 const zelf = require( "zelf" );
@@ -163,7 +163,7 @@ const gnaw = function gnaw( command, synchronous, separator, option ){
 
 	separator = resolveSeparator( depher( parameter, SYMBOL, AND ) );
 
-	command = optall( parameter, STRING ).join( separator );
+	command = pyck( parameter, STRING ).join( separator );
 
 	synchronous = depher( parameter, BOOLEAN, false );
 
@@ -210,8 +210,6 @@ const gnaw = function gnaw( command, synchronous, separator, option ){
 					}else{
 						callback( null, resolveOutput( output ) );
 					}
-
-					catcher.release( );
 				} );
 		} );
 

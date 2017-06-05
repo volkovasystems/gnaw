@@ -1,16 +1,33 @@
+
+const assert = require( "assert" );
 const gnaw = require( "./gnaw.js" );
 
-console.log( gnaw( "ls", true ) )
+assert.deepEqual( gnaw( "ls", true ).split( /\s/ ), [
+	"gnaw.js",
+	"gnaw-test.js",
+	"node_modules",
+	"package.json",
+	"README.md",
+	"yarn.lock"
+], "should be deeply equal" );
 
 gnaw( "ls" )
 	( function done( error, result ){
-		console.log( arguments );
-	} )
+		assert.deepEqual( result.split( /\s/ ), [
+			"gnaw.js",
+			"gnaw-test.js",
+			"node_modules",
+			"package.json",
+			"README.md",
+			"yarn.lock"
+		], "should be deeply equal" );
 
+		console.log( "ok" );
+	} );
 
 gnaw( "lsx" )
 	( function done( error, result ){
-		console.log( arguments );
-	} );
+		assert.equal( error instanceof Error, true, "should be error" );
 
-console.log( gnaw( "ps -e", "grep mongod ", "tr -s ' '", "xargs echo -n", "cut -d ' ' -f 1", PIPE, true ) );
+		console.log( "ok" );
+	} );
