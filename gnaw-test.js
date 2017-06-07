@@ -31,3 +31,16 @@ gnaw( "lsx" )
 
 		console.log( "ok" );
 	} );
+
+const letgo = require( "letgo" );
+let self = { "hello": "world" }
+let catcher = letgo.bind( self )( gnaw.bind( self )( "ls" ) )
+	.push( function callback( error, result ){
+		console.log( "callback", arguments );
+
+		return catcher.pass( error, result );
+	} );
+
+catcher( function callback( ){
+	console.log( "callback 2", arguments );
+} );
