@@ -32,10 +32,10 @@
 			"file": "gnaw.js",
 			"module": "gnaw",
 			"author": "Richeve S. Bebedor",
+			"eMail": "richeve.bebedor@gmail.com",
 			"contributors": [
 				"John Lenon Maghanoy <johnlenonmaghanoy@gmail.com>"
 			],
-			"eMail": "richeve.bebedor@gmail.com",
 			"repository": "https://github.com/volkovasystems/gnaw.git",
 			"test": "gnaw-test.js",
 			"global": true
@@ -52,7 +52,6 @@
 
 	@include:
 		{
-			"clazof": "clazof",
 			"child": "child_process",
 			"depher": "depher",
 			"falzy": "falzy",
@@ -67,7 +66,6 @@
 	@end-include
 */
 
-const clazof = require( "clazof" );
 const child = require( "child_process" );
 const depher = require( "depher" );
 const falzy = require( "falzy" );
@@ -185,7 +183,7 @@ const gnaw = function gnaw( command, synchronous, separator, option ){
 		}catch( error ){
 			error = resolveError( error );
 
-			if( clazof( error, Error ) ){
+			if( error instanceof Error ){
 				throw error;
 
 			}else{
@@ -197,10 +195,10 @@ const gnaw = function gnaw( command, synchronous, separator, option ){
 		let catcher = letgo.bind( zelf( this ) )( function later( callback ){
 			child.exec( command, option,
 				function done( error, output ){
-					if( clazof( error, Error ) ){
+					if( error instanceof Error ){
 						error = resolveError( error );
 
-						if( clazof( error, Error ) ){
+						if( error instanceof Error ){
 							callback( error, "" );
 
 						}else{
