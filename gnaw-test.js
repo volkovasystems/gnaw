@@ -2,14 +2,6 @@
 const assert = require( "assert" );
 const gnaw = require( "./gnaw.js" );
 
-gnaw( "ls" )
-( function done( error, result ){
-	console.log( "Error", error );
-	console.log( "Result", result );
-	console.log( "ok" );
-} );
-
-/*
 assert.deepEqual( gnaw( "ls", true ).split( /\s/ ), [
 	"gnaw.js",
 	"gnaw-test.js",
@@ -52,4 +44,3 @@ let catcher = letgo.bind( self )( gnaw.bind( self )( "ls" ) )
 catcher( function callback( ){
 	console.log( "callback 2", arguments );
 } );
-*/
