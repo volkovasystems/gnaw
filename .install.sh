@@ -1,5 +1,4 @@
 yarn add \
-clazof \
 depher \
 falzy \
 harden \
